@@ -1,9 +1,18 @@
 package metrics
+
+import demos.tenMostRatedFilms
 import util.JDBCUtil
-import demos._
 import org.apache.commons.dbutils.QueryRunner
 import org.apache.spark.sql.{DataFrame, SparkSession}
-
+/**
+  *  @Created with IntelliJ IDEA.
+  *  @author : jmx
+  *  @Date: 2020/11/19
+  *  @Time: 15:23
+  *  */
+/**
+  * 需求3：查找被评分次数较多的前十部电影.
+  */
 class MostRatedFilms extends Serializable {
    def run(moviesDataset: DataFrame, ratingsDataset: DataFrame,spark: SparkSession) = {
 
@@ -46,10 +55,7 @@ val ressql3 =
      resultDS.show(10)
      resultDS.printSchema()
      // 写入MySQL
-     for (elem <- resultDS) {
-       // insert mysql
-       insert2Mysql(elem)
-     }
+     resultDS.foreachPartition(par => par.foreach(insert2Mysql(_)))
 
   }
 
@@ -61,11 +67,13 @@ val ressql3 =
   private def insert2Mysql(res: tenMostRatedFilms): Unit = {
     lazy val conn = JDBCUtil.getQueryRunner()
     conn match {
-      case Some(connection) =>
+      case Some(connection) => {
         upsert(res, connection)
-      case None =>
+      }
+      case None => {
         println("Mysql连接失败")
         System.exit(-1)
+      }
     }
   }
 
@@ -96,9 +104,10 @@ val ressql3 =
         r.ratingCnt
       )
     } catch {
-      case e: Exception =>
+      case e: Exception => {
         e.printStackTrace()
         System.exit(-1)
+      }
     }
   }
 

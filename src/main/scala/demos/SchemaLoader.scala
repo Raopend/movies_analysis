@@ -1,22 +1,28 @@
 package demos
 
-import org.apache.spark.sql.types._
+import org.apache.spark.sql.types.{DataTypes, StructType}
+/**
+  *  @Created with IntelliJ IDEA.
+  *  @author : jmx
+  *  @Date: 2020/11/19
+  *  @Time: 15:17
+  *  */
+
 
 class SchemaLoader {
-    private val movieSchema = StructType(Seq(
-        StructField("movieId", StringType),
-        StructField("title", StringType),
-        StructField("genres", DoubleType)
-    ))
 
-    private val ratingSchema = StructType(Seq(
-        StructField("userId", StringType),
-        StructField("movieId", StringType),
-        StructField("rating", DoubleType),
-        StructField("timestamp", StringType)
-    ))
+  private val movieSchema = new StructType()
+    .add("movieId", DataTypes.StringType, false)
+    .add("title", DataTypes.StringType, false)
+    .add("genres", DataTypes.StringType, false)
 
-    def getMovieSchema: StructType = movieSchema
+  private val ratingSchema = new StructType()
+    .add("userId", DataTypes.StringType, false)
+    .add("movieId", DataTypes.StringType, false)
+    .add("rating", DataTypes.StringType, false)
+    .add("timestamp", DataTypes.StringType, false)
 
-    def getRatingSchema: StructType = ratingSchema
+  def getMovieSchema: StructType = movieSchema
+
+  def getRatingSchema: StructType = ratingSchema
 }

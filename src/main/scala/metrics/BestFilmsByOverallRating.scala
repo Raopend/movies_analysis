@@ -4,7 +4,6 @@ import demos.tenGreatestMoviesByAverageRating
 import util.JDBCUtil
 import org.apache.commons.dbutils.QueryRunner
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
-import org.apache.spark.sql.Dataset
 
 
 /**
@@ -12,7 +11,7 @@ import org.apache.spark.sql.Dataset
   */
 class BestFilmsByOverallRating extends Serializable {
 
-  def run(moviesDataset: DataFrame, ratingsDataset: DataFrame, spark: SparkSession): Unit = {
+  def run(moviesDataset: DataFrame, ratingsDataset: DataFrame, spark: SparkSession) = {
     import spark.implicits._
 
     // 将moviesDataset注册成表
@@ -55,11 +54,9 @@ class BestFilmsByOverallRating extends Serializable {
     val resultDS = spark.sql(ressql1).as[tenGreatestMoviesByAverageRating]
     // 打印数据
     resultDS.show(10)
+    resultDS.printSchema()
     // 写入MySQL
-    for (elem <- resultDS) {
-      // insert mysql
-        insert2Mysql(elem)
-    }
+    resultDS.foreachPartition(par => par.foreach(insert2Mysql(_)))
   }
 
   /**
@@ -67,14 +64,16 @@ class BestFilmsByOverallRating extends Serializable {
     *
     * @param res
     */
-  private def insert2Mysql(res: tenGreatestMoviesByAverageRating)= {
+  private def insert2Mysql(res: tenGreatestMoviesByAverageRating): Unit = {
     lazy val conn = JDBCUtil.getQueryRunner()
     conn match {
-      case Some(connection) =>
+      case Some(connection) => {
         upsert(res, connection)
-      case None =>
+      }
+      case None => {
         println("Mysql连接失败")
         System.exit(-1)
+      }
     }
   }
 
@@ -98,17 +97,17 @@ class BestFilmsByOverallRating extends Serializable {
            |(?,?,?)
        """.stripMargin
       // 执行insert操作
-      val avgRatingParam: java.lang.Double = r.avgRating.asInstanceOf[java.lang.Double]
       conn.update(
         sql,
         r.movieId,
         r.title,
-        avgRatingParam
+        r.avgRating
       )
     } catch {
-      case e: Exception =>
+      case e: Exception => {
         e.printStackTrace()
         System.exit(-1)
+      }
     }
   }
 }

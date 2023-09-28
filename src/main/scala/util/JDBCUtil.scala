@@ -1,14 +1,21 @@
 package util
+
+import demos.tenGreatestMoviesByAverageRating
 import com.mchange.v2.c3p0.ComboPooledDataSource
 import org.apache.commons.dbutils.QueryRunner
 
-
+/**
+  *  @Created with IntelliJ IDEA.
+  *  @author : jmx
+  *  @Date: 2020/11/19
+  *  @Time: 17:54
+  *  */
 object JDBCUtil {
-  private val dataSource = new ComboPooledDataSource()
+  val dataSource = new ComboPooledDataSource()
 
-  private val user = "root"
-  private val password = "123456"
-  private val url = "jdbc:mysql://localhost:3306/movies"
+  val user = "root"
+  val password = "123456"
+  val url = "jdbc:mysql://localhost:3306/movies"
 
   dataSource.setUser(user)
   dataSource.setPassword(password)
@@ -24,6 +31,7 @@ object JDBCUtil {
       case e:Exception =>
         e.printStackTrace()
         None
+
     }
   }
 }

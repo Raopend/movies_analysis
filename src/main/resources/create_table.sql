@@ -1,3 +1,4 @@
+USE movies;
 CREATE TABLE `ten_movies_averagerating` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `movieId` int(11) NOT NULL COMMENT '电影id',
