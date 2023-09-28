@@ -8,7 +8,7 @@ import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 /**
   * 需求1：查找电影评分个数超过5000,且平均评分较高的前十部电影名称及其对应的平均评分
-  */
+ */
 class BestFilmsByOverallRating extends Serializable {
 
   def run(moviesDataset: DataFrame, ratingsDataset: DataFrame, spark: SparkSession) = {
