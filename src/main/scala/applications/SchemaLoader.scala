@@ -1,13 +1,6 @@
-package demos
+package applications
 
 import org.apache.spark.sql.types.{DataTypes, StructType}
-/**
-  *  @Created with IntelliJ IDEA.
-  *  @author : jmx
-  *  @Date: 2020/11/19
-  *  @Time: 15:17
-  *  */
-
 
 class SchemaLoader {
 

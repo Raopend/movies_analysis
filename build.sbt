@@ -12,10 +12,8 @@ libraryDependencies ++= Seq(
 )
 // mysql connector
 libraryDependencies += "mysql" % "mysql-connector-java" % "8.0.26"
-// C3P0
-libraryDependencies += "c3p0" % "c3p0" % "0.9.1.2"
-// dbutils
-libraryDependencies += "commons-dbutils" % "commons-dbutils" % "1.6"
+// slick
+libraryDependencies += "com.typesafe.slick" %% "slick" % "3.3.2"
 lazy val root = (project in file("."))
   .settings(
     name := "movies_analysis"
