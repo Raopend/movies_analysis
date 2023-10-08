@@ -98,6 +98,7 @@ object Main {
     }
 
     def test3(): Unit = {
+        // 需求3:被评分次数较多的前十部电影
         val sql =
             """
               |WITH rating_group AS (
@@ -129,14 +130,19 @@ object Main {
         dbAccess.insertDataDataset(resultDS, "tenMostRatedFilms")
     }
 
+    def test4(): Unit = {
+
+    }
+
     def main(args: Array[String]): Unit = {
         test1()
         test2()
         test3()
+        dbAccess.close()
     }
 
     // 从配置文件加载配置
-    private def loadConfigFromResource(): AppConfig = {
+    def loadConfigFromResource(): AppConfig = {
         val properties = new Properties()
         val configFile = "src/main/resources/application.properties"
         properties.load(new FileInputStream(configFile))
@@ -150,7 +156,7 @@ object Main {
     // 加载 dataset
     def readCsvIntoDataSet(spark: SparkSession, path: String, schema: StructType): DataFrame = {
 
-        val dataSet = spark.read
+                                val dataSet = spark.read
             .format("csv")
             .option("header", "true")
             .schema(schema)
